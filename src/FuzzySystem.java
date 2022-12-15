@@ -6,6 +6,18 @@ public class FuzzySystem {
     ArrayList<Variable> variables;
     ArrayList<Rule> rules;
 
+    public FuzzySystem() {
+
+    }
+
+    @Override
+    public String toString() {
+        return "FuzzySystem{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
     public FuzzySystem(String name, String description) {
         this.name = name;
         this.description = description;

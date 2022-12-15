@@ -7,16 +7,13 @@ public class FuzzySystem {
     String description;
     Set<Variable> variables;
     ArrayList<Rule> rules;
-
-    public FuzzySystem() {
-
-    }
-
     @Override
     public String toString() {
         return "FuzzySystem{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", variables=" + variables +
+                ", rules=" + rules +
                 '}';
     }
 

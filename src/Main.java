@@ -266,7 +266,7 @@ public class Main {
 
 
 
-    private static boolean validVarInput(String tmp) {
+    public static boolean validVarInput(String tmp) {
         String[] line = tmp.split(" ");
         if( (line[1].equalsIgnoreCase("in") || line[1].equalsIgnoreCase("out")) && line.length == 4  && !line[0].isEmpty()){
             if(line[2].charAt(0) == '[' && line[2].charAt(line[2].length()-1) == ','){
@@ -278,7 +278,7 @@ public class Main {
         return false;
     }
 
-    private static boolean validFuzzySetInput(String tmp) {
+    public static boolean validFuzzySetInput(String tmp) {
         String[] line = tmp.split(" ");
         if(line[0].isEmpty())return false;
         if(line[1].equalsIgnoreCase("TRI")){
@@ -302,7 +302,7 @@ public class Main {
         return false;
     }
 
-    private static boolean validRuleInput(String tmp) {
+    public static boolean validRuleInput(String tmp) {
         String[] line = tmp.split(" ");
         if(
                 (line[2].equalsIgnoreCase("or") || line[2].equalsIgnoreCase("and") || line[2].equalsIgnoreCase("and_not"))

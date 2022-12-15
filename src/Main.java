@@ -2,8 +2,29 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
+    public static void main(String[] args){
+        System.out.println("Choose a way for running: ");
+        System.out.println("1- console");
+        System.out.println("2- GUI");
+        System.out.println("3- Files");
+        Scanner sc=new Scanner(System.in);
+        int option=sc.nextInt();
+        switch (option)
+        {
+            case 1:
+                console();
+                break;
+            case 2:
+                new GUI();
+                break;
+            case 3:
+                //FILE
+                break;
+        }
 
-    public static void main(String[] args) {
+
+    }
+    public static void console() {
         System.out.println("Fuzzy Logic Toolbox");
         System.out.println("===================");
         System.out.println("1- Create a new fuzzy system");
@@ -179,7 +200,7 @@ public class Main {
                 // 4- Run the simulation on crisp values.
                 else if (Integer.parseInt(choice) == 4){
                     if(!fuzzySystem.checkStart()) {
-                        System.out.println("CAN’T START THE SIMULATION! Please add the fuzzy sets and rules first.");
+                        System.out.println("CAN'T START THE SIMULATION! Please add the fuzzy sets and rules first.");
                     }
                     else {
                         System.out.println("""

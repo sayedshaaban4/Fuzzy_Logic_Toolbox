@@ -1,5 +1,8 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args){
@@ -18,13 +21,30 @@ public class Main {
                 new GUI();
                 break;
             case 3:
-                //FILE
+                Files();
                 break;
         }
 
 
     }
+    public static void Files(){
+        try {
+            File O = new File("input.txt");
+            Scanner read = new Scanner(O);
+            while (read.hasNextLine()) {
+                String data = read.nextLine();
+                System.out.println(data);
+            }
+            read.close();
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("There is an error while reading the file");
+            e.printStackTrace();
+        }
+    }
+
     public static void console() {
+        while(true){
         System.out.println("Fuzzy Logic Toolbox");
         System.out.println("===================");
         System.out.println("1- Create a new fuzzy system");
@@ -94,6 +114,10 @@ public class Main {
 
                 // 2- Add fuzzy sets to an existing variable.
                 else if(Integer.parseInt(choice) == 2){
+                    if(fuzzySystem.variables.isEmpty()){
+                        System.out.println("You've to enter variables first!");
+                        continue;
+                    }
                     System.out.println("Enter the variable's name:\n" +
                             "--------------------------");
                     String var_name = sc.nextLine();
@@ -206,7 +230,7 @@ public class Main {
                         System.out.println("""
                                 Enter the crisp values:
                                 -----------------------""");
-                        ArrayList<Variable> variables;
+                        Set<Variable> variables;
                         variables = fuzzySystem.getVariables();
                         String localCrispVal;
                         for (Variable var : variables) {
@@ -234,8 +258,9 @@ public class Main {
                     break;
                 }
             }
-        }
+        }else break;
 
+    }
     }
 
 

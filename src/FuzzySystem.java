@@ -1,15 +1,17 @@
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class FuzzySystem {
     String name;
     String description;
-    ArrayList<Variable> variables;
+    Set<Variable> variables;
     ArrayList<Rule> rules;
 
     public FuzzySystem(String name, String description) {
         this.name = name;
         this.description = description;
-        variables = new ArrayList<>();
+        variables = new LinkedHashSet<>();
         rules = new ArrayList<>();
     }
 
@@ -41,7 +43,7 @@ public class FuzzySystem {
         return false;
     }
 
-    public ArrayList<Variable> getVariables()
+    public Set<Variable> getVariables()
     {
         return variables;
     }
@@ -58,10 +60,12 @@ public class FuzzySystem {
                         for (int val=1 ; val <fuzzySet.values.size();val++) {
                             if (fuzzySet.values.get(val) >= crisp) {
                                 if(fuzzySet.type== FuzzySet.SetType.TRIANGULAR){
+                                    //[0,1,0]
                                     fuzzySet.membershipVal = membershipFunction(fuzzySet.values.get(val-1), (val-1)%2,
                                             fuzzySet.values.get(val),val%2,
                                             crisp);
                                 }else{
+                                    //[0,1,1,0]
                                     fuzzySet.membershipVal = membershipFunction(fuzzySet.values.get(val-1),(val-1)%3==2?1:(val-1)%3,
                                             fuzzySet.values.get(val),val%3==2?1:(val)%3,
                                             crisp);
@@ -93,8 +97,7 @@ public class FuzzySystem {
         for(Variable var : variables){
             if(var.type == Variable.VarType.IN)continue;
             for (FuzzySet fuzzySet : var.getFuzzySets()){
-                fuzzySet.centroid=calcCentroid(fuzzySet.values);
-                fuzzySet.centroid= fuzzySet.type==FuzzySet.SetType.TRIANGULAR ?fuzzySet.centroid/3 : fuzzySet.centroid/4;
+                fuzzySet.centroid=calcCentroid(fuzzySet.values,fuzzySet.type==FuzzySet.SetType.TRIANGULAR ?3: 4);
             }
         }
         for(Variable var : variables){
@@ -145,12 +148,12 @@ public class FuzzySystem {
         return output;
     }
 
-    int calcCentroid(ArrayList<Integer> values){
+    int calcCentroid(ArrayList<Integer> values,int base){
         int sum=0;
         for(Integer it : values){
             sum = sum + it;
         }
-        return sum;
+        return sum/base;
     }
 
     public double membershipFunction(int x1,int y1,int x2,int y2,double x) {

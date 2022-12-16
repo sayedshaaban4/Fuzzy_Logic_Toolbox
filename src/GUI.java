@@ -108,7 +108,7 @@ public class GUI implements ActionListener {
             }
         });
         f.add(l1);f.add(l2);f.add(t);f.add(area);f.add(b);
-        f.setSize(800,800);
+        f.setSize(500,600);
         f.setLayout(null);
         f.setVisible(true);
     }
@@ -176,9 +176,14 @@ public class GUI implements ActionListener {
                     addRule();
                 }
                 else if(jRadioButton4.isSelected()) {
+                    if (!fuzzySystem.checkStart()) {
 
-                    //run
-                    run();
+                        JOptionPane.showMessageDialog(frame, "CAN'T START THE SIMULATION! Please add the fuzzy sets and rules first.");
+                        System.out.println("CAN'T START THE SIMULATION! Please add the fuzzy sets and rules first.");
+                    }else {
+                        //run window
+                        run();
+                    }
                 }else{
                     JOptionPane.showMessageDialog(frame, "please choose an option");
                 }
@@ -375,26 +380,81 @@ public class GUI implements ActionListener {
 
 
     }
-    public void run(){
-        JFrame f= new JFrame();
-        if(!fuzzySystem.checkStart()) {
 
-            JOptionPane.showMessageDialog(f, "CAN'T START THE SIMULATION! Please add the fuzzy sets and rules first.");
-            System.out.println("CAN'T START THE SIMULATION! Please add the fuzzy sets and rules first.");
-        }
+
+
+
+    public void run(){
+
+        JFrame f= new JFrame();
+        JLabel l1 = new JLabel("Enter the crisp values :");
         Set<Variable> variables;
         variables = fuzzySystem.getVariables();
-        String localCrispVal;
-
+        ArrayList<JLabel> labels= new ArrayList<>();
+        ArrayList<JTextField> texts= new ArrayList<>();
         for (Variable var : variables) {
             if (var.type == Variable.VarType.IN) {
-                JLabel l =new JLabel(var.name);
-                f.add(l);
+                labels.add(new JLabel(var.name));
+                texts.add(new JTextField());
 
             }
         }
+        System.out.println("labels.size " + labels.size());
+        int y=100;
+        for (int j = 0; j < labels.size(); j++) {
+            System.out.println(labels.get(j).getText());
+            labels.get(j).setBounds(100,y,300,30);
+            f.add(labels.get(j));
+            texts.get(j).setBounds(100,y+50,300,30);
+            f.add(texts.get(j));
+            y+=100;
+        }
+        JButton b=new JButton("ok");
+        l1.setBounds(100,50,300,30);
+        b.setBounds(100,500,120,30);
+        f.add(b);f.add(l1);
+        b.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String s = e.getActionCommand();
+                if (s.equals("ok")) {
+                    //run algorithm
+                    String localCrispVal;
+                    int i=0;
+                    for (Variable var : variables) {
+                        if (var.type == Variable.VarType.IN) {
+                            localCrispVal = texts.get(i).getText();
+                            if (!localCrispVal.matches("\\d+")) {
+                                System.out.println("Please Enter Valid Crisp Value!");
+                            }
+                            var.crispValue = Integer.parseInt(localCrispVal);
+                            System.out.println();
+                        }
+                        i++;
+                    }
+                    System.out.println("Running the simulation...");
+                    fuzzySystem.fuzzification();
+                    fuzzySystem.inference();
+                    fuzzySystem.Defuzzification();
+                    f.dispose();
+
+                }
+
+
+            }
+        });
+        f.setSize(500,600);
+        f.setLayout(null);
+        f.setVisible(true);
 
     }
+
+
+
+
+
+
+
         @Override
         public void actionPerformed(ActionEvent e) {
 

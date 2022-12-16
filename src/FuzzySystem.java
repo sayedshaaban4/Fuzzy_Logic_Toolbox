@@ -57,7 +57,7 @@ public class FuzzySystem {
         return variables;
     }
 
-    public void fuzzification() {
+    public String fuzzification() {
         for (Variable var : variables) {
             if (var.type == Variable.VarType.IN) {
                 int crisp = var.crispValue;
@@ -86,10 +86,10 @@ public class FuzzySystem {
                 }
             }
         }
-        System.out.println("Fuzzification => done");
+        return "Fuzzification => done";
     }
 
-    public void inference() {
+    public String inference() {
         for (Rule rule : rules){
             if(rule.type== Rule.OpType.AND){
                 rule.outVarSet.membershipVal =Math.max(Math.min(rule.inVarSet1.membershipVal,rule.inVarSet2.membershipVal),rule.outVarSet.membershipVal);
@@ -99,10 +99,10 @@ public class FuzzySystem {
                 rule.outVarSet.membershipVal = Math.max(Math.min(rule.inVarSet1.membershipVal,1-rule.inVarSet2.membershipVal),rule.outVarSet.membershipVal);
             }
         }
-        System.out.println("Inference => done");
+        return "Inference => done";
     }
 
-    public void Defuzzification() {
+    public String Defuzzification() {
         for(Variable var : variables){
             if(var.type == Variable.VarType.IN)continue;
             for (FuzzySet fuzzySet : var.getFuzzySets()){
@@ -120,9 +120,9 @@ public class FuzzySystem {
             ans = ans / sumMembers;
             ans = (int) (ans*100) / 100.0;
             String behave = outputBehave(ans,var);
-            System.out.println("Defuzzification => done");
-            System.out.println("The predicted "+var.name+" is "+behave+" ("+ans+") ");
+            return "Defuzzification => done\nThe predicted "+var.name+" is "+behave+" ("+ans+") ";
         }
+        return"";
     }
 
     String outputBehave(double ans , Variable var) {

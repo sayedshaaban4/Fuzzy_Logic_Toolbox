@@ -31,6 +31,18 @@ public class Variable {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return "Variable{" +
+                "name='" + name + '\'' +
+                ", type=" + type +
+                ", fuzzySets=" + fuzzySets +
+                ", crispValue=" + crispValue +
+                ", lowRange=" + lowRange +
+                ", highRange=" + highRange +
+                '}';
+    }
+
     ArrayList<FuzzySet> getFuzzySets(){
         return fuzzySets;
     }

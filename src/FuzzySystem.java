@@ -103,6 +103,7 @@ public class FuzzySystem {
     }
 
     public String Defuzzification() {
+        StringBuilder res=new StringBuilder();
         for(Variable var : variables){
             if(var.type == Variable.VarType.IN)continue;
             for (FuzzySet fuzzySet : var.getFuzzySets()){
@@ -120,9 +121,9 @@ public class FuzzySystem {
             ans = ans / sumMembers;
             ans = (int) (ans*100) / 100.0;
             String behave = outputBehave(ans,var);
-            return "Defuzzification => done\nThe predicted "+var.name+" is "+behave+" ("+ans+") ";
+            res.append("Defuzzification => done\nThe predicted "+var.name+" is "+behave+" ("+ans+") \n");
         }
-        return"";
+        return res.toString();
     }
 
     String outputBehave(double ans , Variable var) {

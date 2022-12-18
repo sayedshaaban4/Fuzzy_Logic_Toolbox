@@ -36,7 +36,6 @@ public class Main {
             Scanner read = new Scanner(O);
             while (read.hasNextLine()) {
                 String data = read.nextLine();
-                System.out.println(Integer.parseInt(data));
                 if( Integer.parseInt(data) != 1 && Integer.parseInt(data) !=2){
                     w.append("Not valid input file1\n");
                     //continue;

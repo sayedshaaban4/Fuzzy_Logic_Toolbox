@@ -1,15 +1,26 @@
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class FuzzySystem {
     String name;
     String description;
-    ArrayList<Variable> variables;
+    Set<Variable> variables;
     ArrayList<Rule> rules;
+    @Override
+    public String toString() {
+        return "FuzzySystem{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", variables=" + variables +
+                ", rules=" + rules +
+                '}';
+    }
 
     public FuzzySystem(String name, String description) {
         this.name = name;
         this.description = description;
-        variables = new ArrayList<>();
+        variables = new LinkedHashSet<>();
         rules = new ArrayList<>();
     }
 
@@ -41,12 +52,12 @@ public class FuzzySystem {
         return false;
     }
 
-    public ArrayList<Variable> getVariables()
+    public Set<Variable> getVariables()
     {
         return variables;
     }
 
-    public void fuzzification() {
+    public String fuzzification() {
         for (Variable var : variables) {
             if (var.type == Variable.VarType.IN) {
                 int crisp = var.crispValue;
@@ -58,10 +69,12 @@ public class FuzzySystem {
                         for (int val=1 ; val <fuzzySet.values.size();val++) {
                             if (fuzzySet.values.get(val) >= crisp) {
                                 if(fuzzySet.type== FuzzySet.SetType.TRIANGULAR){
+                                    //[0,1,0]
                                     fuzzySet.membershipVal = membershipFunction(fuzzySet.values.get(val-1), (val-1)%2,
                                             fuzzySet.values.get(val),val%2,
                                             crisp);
                                 }else{
+                                    //[0,1,1,0]
                                     fuzzySet.membershipVal = membershipFunction(fuzzySet.values.get(val-1),(val-1)%3==2?1:(val-1)%3,
                                             fuzzySet.values.get(val),val%3==2?1:(val)%3,
                                             crisp);
@@ -73,10 +86,10 @@ public class FuzzySystem {
                 }
             }
         }
-        System.out.println("Fuzzification => done");
+        return "Fuzzification => done";
     }
 
-    public void inference() {
+    public String inference() {
         for (Rule rule : rules){
             if(rule.type== Rule.OpType.AND){
                 rule.outVarSet.membershipVal =Math.max(Math.min(rule.inVarSet1.membershipVal,rule.inVarSet2.membershipVal),rule.outVarSet.membershipVal);
@@ -86,15 +99,15 @@ public class FuzzySystem {
                 rule.outVarSet.membershipVal = Math.max(Math.min(rule.inVarSet1.membershipVal,1-rule.inVarSet2.membershipVal),rule.outVarSet.membershipVal);
             }
         }
-        System.out.println("Inference => done");
+        return "Inference => done";
     }
 
-    public void Defuzzification() {
+    public String Defuzzification() {
+        StringBuilder res=new StringBuilder();
         for(Variable var : variables){
             if(var.type == Variable.VarType.IN)continue;
             for (FuzzySet fuzzySet : var.getFuzzySets()){
-                fuzzySet.centroid=calcCentroid(fuzzySet.values);
-                fuzzySet.centroid= fuzzySet.type==FuzzySet.SetType.TRIANGULAR ?fuzzySet.centroid/3 : fuzzySet.centroid/4;
+                fuzzySet.centroid=calcCentroid(fuzzySet.values,fuzzySet.type==FuzzySet.SetType.TRIANGULAR ?3: 4);
             }
         }
         for(Variable var : variables){
@@ -108,9 +121,9 @@ public class FuzzySystem {
             ans = ans / sumMembers;
             ans = (int) (ans*100) / 100.0;
             String behave = outputBehave(ans,var);
-            System.out.println("Defuzzification => done");
-            System.out.println("The predicted "+var.name+" is "+behave+" ("+ans+") ");
+            res.append("Defuzzification => done\nThe predicted "+var.name+" is "+behave+" ("+ans+") \n");
         }
+        return res.toString();
     }
 
     String outputBehave(double ans , Variable var) {
@@ -145,12 +158,12 @@ public class FuzzySystem {
         return output;
     }
 
-    int calcCentroid(ArrayList<Integer> values){
+    int calcCentroid(ArrayList<Integer> values,int base){
         int sum=0;
         for(Integer it : values){
             sum = sum + it;
         }
-        return sum;
+        return sum/base;
     }
 
     public double membershipFunction(int x1,int y1,int x2,int y2,double x) {

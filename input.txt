@@ -1,0 +1,55 @@
+1
+stock market
+lllll
+x
+1
+op IN [0, 100]
+pdp IN [0, 100]
+pydp IN [0, 100]
+y OUT [0, 100]
+d OUT [0, 100]
+x
+2
+op
+low TRI 0 25 50
+normal TRI 25 50 75
+high TRI 50 100 100
+x
+2
+pdp
+low TRI 0 25 50
+normal TRI 25 50 75
+high TRI 50 100 100
+x
+2
+pydp
+low TRI 0 25 50
+normal TRI 25 50 75
+high TRI 50 100 100
+x
+2
+y
+low TRI 0 25 50
+normal TRI 25 50 75
+high TRI 50 100 100
+x
+2
+d
+sell TRI 0 25 50
+hold TRI 25 50 75
+buy TRI 50 100 100
+x
+3
+pdp low and pydp normal => y low
+pdp normal and pydp low => y normal
+pdp high and pydp high => y high
+pdp low and pydp normal => d sell
+pdp normal and pydp low => d hold
+pdp high and pydp high => d buy
+x
+4
+30
+40
+50
+5
+2
